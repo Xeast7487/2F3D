@@ -215,6 +215,15 @@ if (parallaxImg) {
 
   const SEARCH_SVG = `<svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>`;
 
+  // Auto-fill + submit if ?token= is in the URL (lien depuis l'email)
+  const urlToken = new URLSearchParams(window.location.search).get('token');
+  if (urlToken) {
+    const input = document.getElementById('suivi-token');
+    input.value = urlToken;
+    document.getElementById('suivi').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    setTimeout(() => form.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true })), 600);
+  }
+
   form.addEventListener('submit', async e => {
     e.preventDefault();
     const token  = document.getElementById('suivi-token').value.trim();
@@ -232,7 +241,7 @@ if (parallaxImg) {
       const headers = { apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}` };
 
       const r1 = await fetch(
-        `${SUPA_URL}/rest/v1/ac3d_commandes?token=eq.${encodeURIComponent(token)}&select=*`,
+        `${SUPA_URL}/rest/v1/ac3d_commandes?suivi_token=eq.${encodeURIComponent(token)}&select=*`,
         { headers }
       );
       if (!r1.ok) throw new Error('network');
