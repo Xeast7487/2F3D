@@ -25,6 +25,9 @@
       <div class="nav-links">
         <a href="#presentation">Qui sommes-nous</a>
         <a href="#partage">Ce qu'on partage</a>
+        <a href="#calculateur" class="nav-secondary">Prix</a>
+        <a href="#devis" class="nav-secondary">Devis</a>
+        <a href="#suivi" class="nav-secondary">Suivi</a>
         <a href="#communaute" class="nav-cta">Rejoindre</a>
         <a href="https://alexcraft3d.vercel.app/commandes" target="_blank" rel="noopener" class="nav-admin" title="Panel admin">
           <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
@@ -184,13 +187,145 @@
     </div>
   </section>
 
+  <!-- CALCULATEUR -->
+  <section class="section" id="calculateur">
+    <div class="container">
+      <div class="section-meta reveal">
+        <span class="section-num">03</span>
+        <span class="section-rule"></span>
+      </div>
+      <div class="section-header">
+        <h2 class="reveal">Calculateur de prix</h2>
+        <p class="reveal" style="--rd: 0.1s">Estimez le coût de votre impression en quelques secondes.</p>
+      </div>
+      <div class="calc-card reveal">
+        <div class="calc-inputs">
+          <div class="calc-group">
+            <div class="calc-label-row">
+              <span class="calc-label">Poids du modèle</span>
+              <span class="calc-val-badge" id="calc-g-badge">100 g</span>
+            </div>
+            <input type="range" id="calc-g" min="0" max="500" value="100" step="1" class="calc-slider">
+            <div class="calc-range-labels"><span>0 g</span><span>500 g</span></div>
+          </div>
+          <div class="calc-group">
+            <div class="calc-label-row">
+              <span class="calc-label">Durée d'impression</span>
+              <span class="calc-val-badge" id="calc-dur-badge">2 h 30 min</span>
+            </div>
+            <div class="calc-duration-row">
+              <div class="calc-sub-group">
+                <span class="calc-sub-label">Heures</span>
+                <input type="range" id="calc-h" min="0" max="24" value="2" step="1" class="calc-slider">
+                <div class="calc-range-labels"><span>0 h</span><span>24 h</span></div>
+              </div>
+              <div class="calc-sub-group">
+                <span class="calc-sub-label">Minutes</span>
+                <input type="range" id="calc-min" min="0" max="59" value="30" step="1" class="calc-slider">
+                <div class="calc-range-labels"><span>0 min</span><span>59 min</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="calc-result">
+          <div class="calc-result-eyebrow">Estimation</div>
+          <div class="calc-price-big" id="calc-price">8,00 $</div>
+          <div class="calc-breakdown">
+            <div class="calc-breakdown-row">
+              <span>Matière</span>
+              <span id="calc-b-mat">3,00 $</span>
+            </div>
+            <div class="calc-breakdown-row">
+              <span>Temps machine</span>
+              <span id="calc-b-temps">5,00 $</span>
+            </div>
+          </div>
+          <p class="calc-note">Estimation indicative. Le prix final peut varier selon la complexité du modèle et le type de filament.</p>
+          <a href="#devis" class="btn btn-ghost calc-devis-btn">Demander un devis</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- DEVIS -->
+  <section class="section section-alt" id="devis">
+    <div class="container">
+      <div class="section-meta reveal">
+        <span class="section-num">04</span>
+        <span class="section-rule"></span>
+      </div>
+      <div class="section-header">
+        <h2 class="reveal">Demande de devis</h2>
+        <p class="reveal" style="--rd: 0.1s">Décris ton projet et on te répond rapidement avec un prix personnalisé.</p>
+      </div>
+      <form class="devis-form reveal" id="devis-form" novalidate>
+        <div class="form-row-2">
+          <div class="form-group">
+            <label class="form-label" for="dv-nom">Nom</label>
+            <input type="text" id="dv-nom" class="form-input" placeholder="Ton prénom" autocomplete="name" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dv-email">Courriel</label>
+            <input type="email" id="dv-email" class="form-input" placeholder="ton@email.com" autocomplete="email" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="dv-desc">Description du projet</label>
+          <textarea id="dv-desc" class="form-input form-textarea" placeholder="Décris ton projet : dimensions souhaitées, matériau, quantité, usage..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fichier <span class="form-optional">(optionnel — .STL · .OBJ · .3MF · .PNG · .PDF)</span></label>
+          <div class="form-file-zone" id="dv-file-zone">
+            <input type="file" id="dv-file" accept=".stl,.obj,.3mf,.step,.stp,.png,.jpg,.jpeg,.pdf" style="display:none">
+            <label for="dv-file" class="form-file-content">
+              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+              <span id="dv-file-name">Glisse un fichier ici ou clique pour parcourir</span>
+            </label>
+          </div>
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+            Envoyer la demande
+          </button>
+          <p class="form-help-note">Votre client de messagerie s'ouvrira avec le message prêt à envoyer à <strong>info@2f3d.ca</strong>. Joignez vos fichiers 3D directement à l'email.</p>
+        </div>
+        <div class="form-error" id="dv-error" hidden>Merci de remplir tous les champs obligatoires.</div>
+      </form>
+    </div>
+  </section>
+
+  <!-- SUIVI -->
+  <section class="section" id="suivi">
+    <div class="container">
+      <div class="section-meta reveal">
+        <span class="section-num">05</span>
+        <span class="section-rule"></span>
+      </div>
+      <div class="section-header">
+        <h2 class="reveal">Suivi de commande</h2>
+        <p class="reveal" style="--rd: 0.1s">Entre ton code de suivi pour voir l'avancement de ton impression en temps réel.</p>
+      </div>
+      <div class="suivi-wrap reveal">
+        <form class="suivi-form" id="suivi-form">
+          <input type="text" id="suivi-token" class="form-input suivi-input" placeholder="Code de suivi (ex: AB3C-9X2F)" autocomplete="off" spellcheck="false">
+          <button type="submit" class="btn btn-primary suivi-btn" id="suivi-btn">
+            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Chercher
+          </button>
+        </form>
+        <div id="suivi-result"></div>
+      </div>
+    </div>
+  </section>
+
   <!-- CTA -->
   <section class="section cta-section" id="communaute">
     <div class="cta-orb" aria-hidden="true"></div>
     <div class="container">
       <div class="cta-block">
         <div class="section-meta reveal" style="justify-content:center">
-          <span class="section-num">03</span>
+          <span class="section-num">06</span>
           <span class="section-rule" style="max-width:32px"></span>
         </div>
         <img src="./icon_cercle.svg" alt="" class="cta-icon reveal" style="--rd:0.05s">
