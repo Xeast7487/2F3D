@@ -7,8 +7,8 @@
   <meta name="description" content="Alex et Vincent partagent leur passion pour l'impression 3D avec la Bambu Lab. Entraide, idées, conseils et bons plans.">
   <meta property="og:title" content="2F3D — Les Deux Frères de l'Impression 3D">
   <meta property="og:description" content="Alex et Vincent partagent leur passion pour l'impression 3D.">
-  <meta property="og:image" content="./banner.png">
-  <link rel="icon" type="image/png" href="./logo.png">
+  <meta property="og:image" content="./banner_web.jpg">
+  <link rel="icon" type="image/svg+xml" href="./icon_cube.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800;900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -19,10 +19,9 @@
   <!-- NAV -->
   <nav class="nav">
     <div class="nav-inner">
-      <div class="nav-logo">
-        <img src="./logo.png" alt="2F3D Logo" class="nav-logo-img">
-        <span class="nav-brand"><span class="white">2F</span><span class="orange">3D</span></span>
-      </div>
+      <a href="#" class="nav-logo">
+        <img src="./logo_compact.svg" alt="2F3D" class="nav-logo-svg">
+      </a>
       <div class="nav-links">
         <a href="#presentation">Qui sommes-nous</a>
         <a href="#partage">Ce qu'on partage</a>
@@ -34,18 +33,20 @@
   <!-- HERO -->
   <section class="hero">
     <div class="hero-bg">
-      <img src="./banner.png" alt="2F3D Banner" class="hero-banner-img">
+      <img src="./banner_web.jpg" alt="2F3D Banner" class="hero-banner-img">
       <div class="hero-overlay"></div>
     </div>
     <div class="hero-content">
-      <img src="./logo.png" alt="2F3D" class="hero-logo">
-      <p class="hero-sub">Les Deux Frères de l'Impression 3D</p>
+      <img src="./logo_slogan.svg" alt="2F3D — Les Deux Frères de l'Impression 3D" class="hero-logo-svg">
       <div class="hero-actions">
         <a href="https://www.facebook.com/share/1DTXK3AwBV/?mibextid=wwXIfr" target="_blank" rel="noopener" class="btn btn-facebook">
           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
           Rejoindre la page Facebook
         </a>
         <a href="#presentation" class="btn btn-outline">Découvrir</a>
+      </div>
+      <div class="hero-scroll">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
       </div>
     </div>
   </section>
@@ -74,7 +75,7 @@
         <div class="divider-vertical">
           <div class="divider-line"></div>
           <span class="divider-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+            <img src="./icon_cube.svg" alt="" width="32" height="32">
           </span>
           <div class="divider-line"></div>
         </div>
@@ -109,16 +110,16 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </div>
           <h3>Entraide</h3>
-          <p>Questions & Réponses</p>
+          <p class="feature-cat">Questions &amp; Réponses</p>
           <p class="feature-sub">Un problème avec ton imprimante ? On est là pour aider.</p>
         </div>
 
         <div class="feature-card">
           <div class="feature-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="6"/><line x1="12" y1="18" x2="12" y2="22"/><line x1="4.93" y1="4.93" x2="7.76" y2="7.76"/><line x1="16.24" y1="16.24" x2="19.07" y2="19.07"/><line x1="2" y1="12" x2="6" y2="12"/><line x1="18" y1="12" x2="22" y2="12"/><line x1="4.93" y1="19.07" x2="7.76" y2="16.24"/><line x1="16.24" y1="7.76" x2="19.07" y2="4.93"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           </div>
           <h3>Idées</h3>
-          <p>Projets & Inspiration</p>
+          <p class="feature-cat">Projets &amp; Inspiration</p>
           <p class="feature-sub">Des modèles à imprimer, des idées créatives et des projets originaux.</p>
         </div>
 
@@ -127,7 +128,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M4.93 4.93a10 10 0 0 0 0 14.14"/><path d="M22 12a10 10 0 0 1-10 10"/><path d="M12 2a10 10 0 0 1 10 10"/></svg>
           </div>
           <h3>Conseils</h3>
-          <p>Réglages & Astuces</p>
+          <p class="feature-cat">Réglages &amp; Astuces</p>
           <p class="feature-sub">Les bons réglages de slicer, les profils testés, les trucs qui fonctionnent.</p>
         </div>
 
@@ -136,7 +137,7 @@
             <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
           </div>
           <h3>Bons Plans</h3>
-          <p>Matériel & Accessoires</p>
+          <p class="feature-cat">Matériel &amp; Accessoires</p>
           <p class="feature-sub">Les meilleurs achats, les filaments qui valent la peine, les deals du moment.</p>
         </div>
 
@@ -148,7 +149,7 @@
   <section class="section" id="communaute">
     <div class="container">
       <div class="cta-block">
-        <img src="./logo.png" alt="2F3D" class="cta-logo">
+        <img src="./icon_cercle.svg" alt="2F3D" class="cta-icon">
         <h2>Rejoins la communauté</h2>
         <p>Suis-nous sur Facebook pour ne rien manquer — nos créations, nos conseils, et nos lives d'impression.</p>
         <a href="https://www.facebook.com/share/1DTXK3AwBV/?mibextid=wwXIfr" target="_blank" rel="noopener" class="btn btn-facebook btn-lg">
@@ -163,7 +164,7 @@
   <footer class="footer">
     <div class="container footer-inner">
       <div class="footer-brand">
-        <span class="white">2F</span><span class="orange">3D</span>
+        <img src="./logo_compact.svg" alt="2F3D" class="footer-logo-svg">
         <span class="footer-tagline">Les Deux Frères de l'Impression 3D</span>
       </div>
       <div class="footer-links">
