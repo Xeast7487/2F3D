@@ -55,47 +55,6 @@ if (parallaxImg) {
   }, { passive: true });
 }
 
-/* ── Calculateur de prix ─────────────────────────────────────────────────── */
-(function () {
-  const sliders = {
-    g:   document.getElementById('calc-g'),
-    h:   document.getElementById('calc-h'),
-    min: document.getElementById('calc-min'),
-  };
-  if (!sliders.g) return;
-
-  function fmt(n) {
-    return n.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $';
-  }
-
-  function updateFill(el) {
-    const pct = ((+el.value - +el.min) / (+el.max - +el.min)) * 100;
-    el.style.background =
-      `linear-gradient(to right, var(--orange) ${pct}%, rgba(255,255,255,0.1) ${pct}%)`;
-  }
-
-  function update() {
-    const g = +sliders.g.value;
-    const h = +sliders.h.value;
-    const m = +sliders.min.value;
-    const matiere = g * 0.03;
-    const temps   = (h + m / 60) * 2;
-    const total   = matiere + temps;
-
-    document.getElementById('calc-g-badge').textContent = g + ' g';
-    document.getElementById('calc-dur-badge').textContent =
-      (h > 0 ? h + ' h ' : '') + m + ' min';
-    document.getElementById('calc-price').textContent   = fmt(total);
-    document.getElementById('calc-b-mat').textContent   = fmt(matiere);
-    document.getElementById('calc-b-temps').textContent = fmt(temps);
-
-    Object.values(sliders).forEach(updateFill);
-  }
-
-  Object.values(sliders).forEach(s => s.addEventListener('input', update));
-  update();
-})();
-
 /* ── Formulaire de devis ─────────────────────────────────────────────────── */
 (function () {
   const form = document.getElementById('devis-form');
