@@ -626,7 +626,7 @@ img { display: block; max-width: 100%; }
 
 @media (max-width: 600px) {
   .features-grid { grid-template-columns: 1fr; }
-  .nav-links a:not(.nav-cta) { display: none; }
+  .nav-links a:not(.nav-cta):not(.nav-admin) { display: none; }
   .nav-inner { padding: 0 20px; }
   .container { padding: 0 20px; }
   .hero-logo-svg { width: 90vw; }
