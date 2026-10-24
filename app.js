@@ -1,3 +1,24 @@
+/* ── Liquid Glass — lumière souris sur les cards ────────────────────────────── */
+(function () {
+  function bindLight(selector) {
+    document.querySelectorAll(selector).forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        const x = ((e.clientX - r.left) / r.width  * 100).toFixed(1);
+        const y = ((e.clientY - r.top)  / r.height * 100).toFixed(1);
+        card.style.setProperty('--mouse-x', x + '%');
+        card.style.setProperty('--mouse-y', y + '%');
+      });
+      card.addEventListener('mouseleave', () => {
+        card.style.setProperty('--mouse-x', '50%');
+        card.style.setProperty('--mouse-y', '0%');
+      });
+    });
+  }
+  bindLight('.brother-card');
+  bindLight('.feature-card');
+})();
+
 /* ── Scroll reveal ─────────────────────────────────────────────────────────── */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {
