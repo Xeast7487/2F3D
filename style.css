@@ -771,6 +771,129 @@ body::before {
 
 .form-textarea { resize: vertical; min-height: 140px; line-height: 1.65; }
 
+/* ── Calculateur de devis ─────────────────────────────────────────────────── */
+.dv-calc {
+  background: rgba(255, 101, 8, 0.04);
+  border: 1px solid rgba(255, 101, 8, 0.18);
+  border-radius: 20px;
+  padding: 28px 32px;
+  margin-bottom: 28px;
+}
+.dv-calc-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+.dv-calc-header h3 {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: -0.01em;
+}
+.dv-calc-header span {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 400;
+  padding: 3px 10px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 20px;
+  border: 1px solid var(--border);
+}
+.dv-calc-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+.dv-input-unit {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.dv-input-unit .form-input { flex: 1; }
+.dv-unit-label {
+  font-size: 0.85rem;
+  color: var(--text-muted);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.dv-time-wrap { display: flex; gap: 8px; }
+.dv-time-wrap .form-input { flex: 1; }
+.dv-select {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  padding: 14px 18px;
+  font-size: 0.95rem;
+  font-family: 'Inter', sans-serif;
+  color: var(--text);
+  outline: none;
+  width: 100%;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07);
+  -webkit-appearance: none;
+  appearance: none;
+}
+.dv-select:focus { border-color: var(--orange); box-shadow: 0 0 0 3px rgba(255,101,8,0.12); }
+.dv-select option { background: #161616; color: var(--text); }
+
+.dv-result {
+  display: none;
+  background: rgba(0,0,0,0.25);
+  border: 1px solid rgba(255, 101, 8, 0.15);
+  border-radius: 14px;
+  padding: 20px 24px;
+  margin-top: 4px;
+}
+.dv-result.visible { display: block; }
+.dv-result-rows { display: flex; flex-direction: column; gap: 8px; margin-bottom: 14px; }
+.dv-result-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.875rem;
+}
+.dv-result-row .label { color: var(--text-muted); }
+.dv-result-row .val { font-weight: 600; font-family: monospace; }
+.dv-result-row.petg-row { color: var(--orange); }
+.dv-result-divider { height: 1px; background: var(--border); margin: 4px 0; }
+.dv-result-total {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-top: 4px;
+}
+.dv-result-total .total-label {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+.dv-result-total .total-val {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 900;
+  color: var(--orange);
+  line-height: 1;
+}
+.dv-result-note {
+  margin-top: 12px;
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  line-height: 1.6;
+  border-top: 1px solid var(--border);
+  padding-top: 12px;
+}
+
+@media (max-width: 640px) {
+  .dv-calc-inputs { grid-template-columns: 1fr; }
+  .dv-calc { padding: 20px; }
+}
+
 /* ── Devis form ───────────────────────────────────────────────────────────── */
 .devis-form {
   max-width: 760px;

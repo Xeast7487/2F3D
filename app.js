@@ -19,6 +19,28 @@
   bindLight('.feature-card');
 })();
 
+/* ── Estimateur de prix devis ──────────────────────────────────────────────── */
+function calcDevis() {
+  const g   = parseFloat(document.getElementById('dv-grams')?.value) || 0;
+  const h   = parseFloat(document.getElementById('dv-hours')?.value) || 0;
+  const m   = parseFloat(document.getElementById('dv-mins')?.value)  || 0;
+  const mat = document.getElementById('dv-mat')?.value || 'pla';
+  if (!g && !h && !m) { document.getElementById('dv-result')?.classList.remove('visible'); return; }
+  const hrs      = h + m / 60;
+  const filament = g * 1.10 * 0.028;
+  const machine  = hrs * 2;
+  const petg     = mat === 'petg' ? 3 : 0;
+  const total    = filament + machine + petg;
+  const fmt = v => v.toFixed(2) + ' $';
+  let rows = `
+    <div class="dv-result-row"><span class="label">Filament (${g}g × 1,10 × 0,028 $)</span><span class="val">${fmt(filament)}</span></div>
+    <div class="dv-result-row"><span class="label">Machine (${hrs.toFixed(2)}h × 2 $)</span><span class="val">${fmt(machine)}</span></div>`;
+  if (petg) rows += `<div class="dv-result-row petg-row"><span class="label">Supplément PETG</span><span class="val">${fmt(petg)}</span></div>`;
+  document.getElementById('dv-result-rows').innerHTML = rows;
+  document.getElementById('dv-total').textContent = fmt(total);
+  document.getElementById('dv-result').classList.add('visible');
+}
+
 /* ── Scroll reveal ─────────────────────────────────────────────────────────── */
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach(entry => {

@@ -197,6 +197,46 @@
         <h2 class="reveal">Demande de devis</h2>
         <p class="reveal" style="--rd: 0.1s">Décris ton projet et on te répond rapidement avec un prix personnalisé.</p>
       </div>
+      <div class="dv-calc reveal" style="--rd:0.05s">
+        <div class="dv-calc-header">
+          <h3>🧮 Estimateur de prix</h3>
+          <span>Données de Bambu Studio</span>
+        </div>
+        <div class="dv-calc-inputs">
+          <div class="form-group">
+            <label class="form-label" for="dv-grams">Poids</label>
+            <div class="dv-input-unit">
+              <input type="number" id="dv-grams" class="form-input" placeholder="ex: 150" min="1" oninput="calcDevis()">
+              <span class="dv-unit-label">g</span>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Temps d'impression</label>
+            <div class="dv-time-wrap">
+              <input type="number" id="dv-hours" class="form-input" placeholder="h" min="0" oninput="calcDevis()">
+              <input type="number" id="dv-mins" class="form-input" placeholder="min" min="0" max="59" oninput="calcDevis()">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="dv-mat">Matériau</label>
+            <select id="dv-mat" class="dv-select" onchange="calcDevis()">
+              <option value="pla">PLA</option>
+              <option value="petg">PETG (+3 $)</option>
+              <option value="autre">Autre</option>
+            </select>
+          </div>
+        </div>
+        <div class="dv-result" id="dv-result">
+          <div class="dv-result-rows" id="dv-result-rows"></div>
+          <div class="dv-result-divider"></div>
+          <div class="dv-result-total">
+            <span class="total-label">Estimé</span>
+            <span class="total-val" id="dv-total">—</span>
+          </div>
+          <p class="dv-result-note">Dépôt de 50 % par virement Interac requis avant le lancement. Service limité à l'impression, sans peinture ni finition. Prix approximatif selon l'estimation Bambu Studio. Taxes en sus.</p>
+        </div>
+      </div>
+
       <form class="devis-form reveal" id="devis-form" novalidate>
         <div class="form-row-2">
           <div class="form-group">
