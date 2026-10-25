@@ -151,7 +151,7 @@ if (parallaxImg) {
     btn.disabled = true;
     btn.innerHTML = '⏳ Envoi en cours…';
 
-    let fileName = null, fileData = null;
+    let fileName = null;
     if (file) {
       if (file.size > 3 * 1024 * 1024) {
         errEl.textContent = 'Le fichier dépasse 3 Mo. Envoie-le séparément à info@2f3d.ca.';
@@ -159,18 +159,38 @@ if (parallaxImg) {
         btn.disabled = false; btn.innerHTML = btnHTML;
         return;
       }
-      const ab  = await file.arrayBuffer();
-      fileData  = btoa(new Uint8Array(ab).reduce((s, b) => s + String.fromCharCode(b), ''));
-      fileName  = file.name;
+      fileName = file.name;
     }
 
+    let estimateText = '';
+    if (g || h || m) {
+      const hrs      = (parseFloat(h) || 0) + (parseFloat(m) || 0) / 60;
+      const filament = (parseFloat(g) || 0) * 1.10 * 0.028;
+      const machine  = hrs * 2;
+      const petg     = mat === 'petg' ? 3 : 0;
+      const total    = filament + machine + petg;
+      const fmt      = v => v.toFixed(2) + ' $';
+      const matLabel = mat === 'petg' ? 'PETG' : mat === 'autre' ? 'Autre' : 'PLA';
+      estimateText   = `\n\n--- Estimation ---\nPoids: ${g || '—'}g | Temps: ${parseFloat(h)||0}h${parseFloat(m)||0}min | Matériau: ${matLabel}\nFilament: ${fmt(filament)} | Machine: ${fmt(machine)}${petg ? ` | PETG: ${fmt(petg)}` : ''}\nTotal estimé: ${fmt(total)}`;
+    }
+
+    const message = `Nom     : ${nom}\nCourriel: ${email}\n\nDescription :\n${desc}${estimateText}${fileName ? `\n\n📎 Fichier : ${fileName}` : ''}`;
+
     try {
-      const r = await fetch('/api/devis', {
+      const r = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nom, email, desc, fileName, fileData, g, h, m, mat }),
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify({
+          access_key: 'a63f0ef4-8c97-4683-8af2-7b423b9ee1e4',
+          subject:    `Demande de devis 2F3D — ${nom}`,
+          from_name:  nom,
+          email,
+          message,
+          botcheck:   false,
+        }),
       });
-      if (!r.ok) throw new Error();
+      const json = await r.json();
+      if (!json.success) throw new Error(json.message);
 
       form.reset();
       fileLabel.textContent = 'Glisse un fichier ici ou clique pour parcourir';
