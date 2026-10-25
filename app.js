@@ -206,6 +206,121 @@ if (parallaxImg) {
   });
 })();
 
+/* ── Chat widget ─────────────────────────────────────────────────────────── */
+(function () {
+  const SUPA_URL = 'https://gnpjilwdehxsafdqdtak.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImducGppbHdkZWh4c2FmZHFkdGFrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzk5Nzk3NjIsImV4cCI6MjA5NTU1NTc2Mn0.iFYR9r5ZZsKcc9n2N8jPtFTLs0QDTIqR3KMCMhCdSdA';
+  const hdrs = {
+    apikey: SUPA_KEY, Authorization: `Bearer ${SUPA_KEY}`,
+    'Content-Type': 'application/json', Accept: 'application/json', Prefer: 'return=representation',
+  };
+
+  const bubble   = document.getElementById('chat-bubble');
+  const widget   = document.getElementById('chat-widget');
+  const msgsEl   = document.getElementById('chat-messages');
+  const inputEl  = document.getElementById('chat-input');
+  const sendBtn  = document.getElementById('chat-send');
+  const closeBtn = document.getElementById('chat-close');
+  const badge    = document.getElementById('chat-badge');
+  if (!bubble) return;
+
+  let sessionId   = localStorage.getItem('2f3d_chat_session');
+  let lastSeenAt  = null;
+  let pollTimer   = null;
+  let isOpen      = false;
+  let unread      = 0;
+
+  function setOpen(state) {
+    isOpen = state;
+    widget.classList.toggle('open', state);
+    bubble.classList.toggle('active', state);
+    if (state) { badge.hidden = true; unread = 0; msgsEl.scrollTop = msgsEl.scrollHeight; inputEl.focus(); }
+  }
+
+  bubble.addEventListener('click', async () => {
+    const opening = !isOpen;
+    setOpen(opening);
+    if (opening && sessionId && !pollTimer) { await loadHistory(); startPolling(); }
+  });
+  closeBtn.addEventListener('click', () => setOpen(false));
+
+  async function getOrCreate() {
+    if (sessionId) return sessionId;
+    const r = await fetch(`${SUPA_URL}/rest/v1/chat_sessions`, {
+      method: 'POST', headers: hdrs,
+      body: JSON.stringify({ site: '2f3d', visitor_name: 'Visiteur' }),
+    });
+    const [s] = await r.json();
+    sessionId = s.id;
+    localStorage.setItem('2f3d_chat_session', sessionId);
+    return sessionId;
+  }
+
+  function appendMsg(text, sender, animate = true) {
+    const d = document.createElement('div');
+    d.className = `chat-msg chat-msg-${sender}`;
+    if (!animate) d.style.animation = 'none';
+    d.textContent = text;
+    msgsEl.appendChild(d);
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+  }
+
+  async function loadHistory() {
+    if (!sessionId) return;
+    const r = await fetch(`${SUPA_URL}/rest/v1/chat_messages?session_id=eq.${sessionId}&order=created_at.asc`, { headers: hdrs });
+    const msgs = await r.json();
+    if (!Array.isArray(msgs)) return;
+    const welcome = msgsEl.querySelector('.chat-welcome');
+    msgsEl.innerHTML = '';
+    if (welcome) msgsEl.appendChild(welcome);
+    for (const m of msgs) {
+      appendMsg(m.message, m.sender, false);
+      if (!lastSeenAt || m.created_at > lastSeenAt) lastSeenAt = m.created_at;
+    }
+  }
+
+  function startPolling() {
+    if (pollTimer) return;
+    pollTimer = setInterval(pollNew, 4000);
+  }
+
+  async function pollNew() {
+    if (!sessionId) return;
+    const since = lastSeenAt ? `&created_at=gt.${encodeURIComponent(lastSeenAt)}` : '';
+    const r = await fetch(
+      `${SUPA_URL}/rest/v1/chat_messages?session_id=eq.${sessionId}&sender=eq.owner&order=created_at.asc${since}`,
+      { headers: hdrs }
+    );
+    const msgs = await r.json();
+    if (!Array.isArray(msgs) || !msgs.length) return;
+    for (const m of msgs) {
+      appendMsg(m.message, m.sender);
+      if (!lastSeenAt || m.created_at > lastSeenAt) lastSeenAt = m.created_at;
+      if (!isOpen) { unread++; badge.hidden = false; badge.textContent = unread > 9 ? '9+' : String(unread); }
+    }
+  }
+
+  sendBtn.addEventListener('click', doSend);
+  inputEl.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); doSend(); } });
+  inputEl.addEventListener('input', () => { inputEl.style.height = 'auto'; inputEl.style.height = Math.min(inputEl.scrollHeight, 80) + 'px'; });
+
+  async function doSend() {
+    const text = inputEl.value.trim();
+    if (!text) return;
+    inputEl.value = '';
+    inputEl.style.height = 'auto';
+    const sid = await getOrCreate();
+    appendMsg(text, 'visitor');
+    await fetch(`${SUPA_URL}/rest/v1/chat_messages`, {
+      method: 'POST', headers: hdrs,
+      body: JSON.stringify({ session_id: sid, sender: 'visitor', message: text }),
+    });
+    if (!pollTimer) startPolling();
+  }
+
+  if (sessionId) startPolling();
+})();
+
 /* ── Suivi de commande ───────────────────────────────────────────────────── */
 (function () {
   const form = document.getElementById('suivi-form');
