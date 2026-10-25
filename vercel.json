@@ -1,0 +1,7 @@
+{
+  "functions": {
+    "api/devis.js": {
+      "runtime": "nodejs20.x"
+    }
+  }
+}
