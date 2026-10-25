@@ -119,7 +119,10 @@ if (parallaxImg) {
     }
   });
 
-  form.addEventListener('submit', e => {
+  const btn = form.querySelector('[type=submit]');
+  const btnHTML = btn.innerHTML;
+
+  form.addEventListener('submit', async e => {
     e.preventDefault();
     const nom   = document.getElementById('dv-nom').value.trim();
     const email = document.getElementById('dv-email').value.trim();
@@ -128,6 +131,7 @@ if (parallaxImg) {
 
     ['dv-nom', 'dv-email', 'dv-desc'].forEach(id =>
       document.getElementById(id).classList.remove('invalid'));
+    errEl.textContent = 'Merci de remplir tous les champs obligatoires.';
 
     let valid = true;
     if (!nom)  { document.getElementById('dv-nom').classList.add('invalid');  valid = false; }
@@ -135,18 +139,50 @@ if (parallaxImg) {
       document.getElementById('dv-email').classList.add('invalid'); valid = false;
     }
     if (!desc) { document.getElementById('dv-desc').classList.add('invalid'); valid = false; }
-
     if (!valid) { errEl.hidden = false; return; }
     errEl.hidden = true;
 
-    const subject = `Demande de devis 2F3D — ${nom}`;
-    let body = `Bonjour,\n\nJe souhaite obtenir un devis pour le projet suivant :\n\n${desc}`;
-    if (file) body += `\n\nFichier à joindre : ${file.name}`;
-    body += `\n\n---\nNom : ${nom}\nCourriel de retour : ${email}\n\nEnvoyé depuis 2f3d.ca`;
+    // Collect estimator values if filled
+    const g   = document.getElementById('dv-grams')?.value || '';
+    const h   = document.getElementById('dv-hours')?.value || '';
+    const m   = document.getElementById('dv-mins')?.value  || '';
+    const mat = document.getElementById('dv-mat')?.value   || '';
 
-    window.open(
-      `mailto:info@2f3d.ca?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`
-    );
+    btn.disabled = true;
+    btn.innerHTML = '⏳ Envoi en cours…';
+
+    let fileName = null, fileData = null;
+    if (file) {
+      if (file.size > 3 * 1024 * 1024) {
+        errEl.textContent = 'Le fichier dépasse 3 Mo. Envoie-le séparément à info@2f3d.ca.';
+        errEl.hidden = false;
+        btn.disabled = false; btn.innerHTML = btnHTML;
+        return;
+      }
+      const ab  = await file.arrayBuffer();
+      fileData  = btoa(new Uint8Array(ab).reduce((s, b) => s + String.fromCharCode(b), ''));
+      fileName  = file.name;
+    }
+
+    try {
+      const r = await fetch('/api/devis', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ nom, email, desc, fileName, fileData, g, h, m, mat }),
+      });
+      if (!r.ok) throw new Error();
+
+      form.reset();
+      fileLabel.textContent = 'Glisse un fichier ici ou clique pour parcourir';
+      fileZone.classList.remove('has-file');
+      document.getElementById('dv-result')?.classList.remove('visible');
+      btn.innerHTML = '✅ Demande envoyée !';
+      setTimeout(() => { btn.disabled = false; btn.innerHTML = btnHTML; }, 4000);
+    } catch (_) {
+      errEl.textContent = 'Erreur d\'envoi. Écris-nous directement à info@2f3d.ca.';
+      errEl.hidden = false;
+      btn.disabled = false; btn.innerHTML = btnHTML;
+    }
   });
 })();
 
