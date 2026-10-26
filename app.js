@@ -271,21 +271,34 @@ if (parallaxImg) {
     introBtn.disabled = true;
     introBtn.textContent = '…';
 
-    const email = introEmail.value.trim();
-    const r = await fetch(`${SUPA_URL}/rest/v1/chat_sessions`, {
-      method: 'POST', headers: hdrs,
-      body: JSON.stringify({ site: '2f3d', visitor_name: name, visitor_email: email || null }),
-    });
-    const [s] = await r.json();
-    sessionId = s.id;
-    localStorage.setItem('2f3d_chat_session', sessionId);
-    localStorage.setItem('2f3d_chat_name', name);
+    try {
+      const email = introEmail.value.trim();
+      const payload = { site: '2f3d', visitor_name: name };
+      if (email) payload.visitor_email = email;
 
-    showChat();
-    startPolling();
+      const r = await fetch(`${SUPA_URL}/rest/v1/chat_sessions`, {
+        method: 'POST', headers: hdrs,
+        body: JSON.stringify(payload),
+      });
 
-    introBtn.disabled = false;
-    introBtn.textContent = 'Commencer →';
+      const body = await r.json();
+      console.log('[chat] session response:', r.status, body);
+
+      const s = Array.isArray(body) ? body[0] : body;
+      if (!s?.id) throw new Error('Pas d\'ID dans la réponse: ' + JSON.stringify(body));
+
+      sessionId = s.id;
+      localStorage.setItem('2f3d_chat_session', sessionId);
+      localStorage.setItem('2f3d_chat_name', name);
+
+      showChat();
+      startPolling();
+    } catch (err) {
+      console.error('[chat] submitIntro error:', err);
+      introBtn.textContent = '❌ Erreur — réessayer';
+    } finally {
+      introBtn.disabled = false;
+    }
   }
 
   introBtn.addEventListener('click', submitIntro);
