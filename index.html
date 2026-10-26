@@ -349,10 +349,16 @@
         <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
-    <div id="chat-messages" class="chat-messages">
+    <div id="chat-intro" class="chat-intro">
+      <p class="chat-intro-text">Avant de commencer, dites-nous qui vous êtes :</p>
+      <input id="chat-intro-name"  class="chat-intro-input" type="text"  placeholder="Votre nom *"             maxlength="80">
+      <input id="chat-intro-email" class="chat-intro-input" type="email" placeholder="Courriel (optionnel)"    maxlength="120">
+      <button id="chat-intro-btn" class="chat-intro-btn">Commencer →</button>
+    </div>
+    <div id="chat-messages" class="chat-messages" hidden>
       <div class="chat-welcome">Bonjour 👋 Une question? Posez-la ici, on vous répond dès que possible.</div>
     </div>
-    <div class="chat-footer">
+    <div class="chat-footer" id="chat-footer" hidden>
       <textarea id="chat-input" class="chat-input" placeholder="Votre message…" rows="1" maxlength="1000"></textarea>
       <button id="chat-send" class="chat-send" aria-label="Envoyer">
         <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>

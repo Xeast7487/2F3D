@@ -215,13 +215,18 @@ if (parallaxImg) {
     'Content-Type': 'application/json', Accept: 'application/json', Prefer: 'return=representation',
   };
 
-  const bubble   = document.getElementById('chat-bubble');
-  const widget   = document.getElementById('chat-widget');
-  const msgsEl   = document.getElementById('chat-messages');
-  const inputEl  = document.getElementById('chat-input');
-  const sendBtn  = document.getElementById('chat-send');
-  const closeBtn = document.getElementById('chat-close');
-  const badge    = document.getElementById('chat-badge');
+  const bubble    = document.getElementById('chat-bubble');
+  const widget    = document.getElementById('chat-widget');
+  const introEl   = document.getElementById('chat-intro');
+  const introName = document.getElementById('chat-intro-name');
+  const introEmail= document.getElementById('chat-intro-email');
+  const introBtn  = document.getElementById('chat-intro-btn');
+  const msgsEl    = document.getElementById('chat-messages');
+  const footerEl  = document.getElementById('chat-footer');
+  const inputEl   = document.getElementById('chat-input');
+  const sendBtn   = document.getElementById('chat-send');
+  const closeBtn  = document.getElementById('chat-close');
+  const badge     = document.getElementById('chat-badge');
   if (!bubble) return;
 
   let sessionId   = localStorage.getItem('2f3d_chat_session');
@@ -230,11 +235,24 @@ if (parallaxImg) {
   let isOpen      = false;
   let unread      = 0;
 
+  function showChat() {
+    introEl.hidden  = true;
+    msgsEl.hidden   = false;
+    footerEl.hidden = false;
+    msgsEl.scrollTop = msgsEl.scrollHeight;
+    inputEl.focus();
+  }
+
   function setOpen(state) {
     isOpen = state;
     widget.classList.toggle('open', state);
     bubble.classList.toggle('active', state);
-    if (state) { badge.hidden = true; unread = 0; msgsEl.scrollTop = msgsEl.scrollHeight; inputEl.focus(); }
+    if (state) {
+      badge.hidden = true;
+      unread = 0;
+      if (sessionId) { msgsEl.scrollTop = msgsEl.scrollHeight; inputEl.focus(); }
+      else introName.focus();
+    }
   }
 
   bubble.addEventListener('click', async () => {
@@ -244,23 +262,50 @@ if (parallaxImg) {
   });
   closeBtn.addEventListener('click', () => setOpen(false));
 
-  async function getOrCreate() {
-    if (sessionId) return sessionId;
+  // ─── Intro form ────────────────────────────────────────────────────────────
+  async function submitIntro() {
+    const name = introName.value.trim();
+    introName.classList.toggle('invalid', !name);
+    if (!name) { introName.focus(); return; }
+
+    introBtn.disabled = true;
+    introBtn.textContent = '…';
+
+    const email = introEmail.value.trim();
     const r = await fetch(`${SUPA_URL}/rest/v1/chat_sessions`, {
       method: 'POST', headers: hdrs,
-      body: JSON.stringify({ site: '2f3d', visitor_name: 'Visiteur' }),
+      body: JSON.stringify({ site: '2f3d', visitor_name: name, visitor_email: email || null }),
     });
     const [s] = await r.json();
     sessionId = s.id;
     localStorage.setItem('2f3d_chat_session', sessionId);
-    return sessionId;
+    localStorage.setItem('2f3d_chat_name', name);
+
+    showChat();
+    startPolling();
+
+    introBtn.disabled = false;
+    introBtn.textContent = 'Commencer →';
   }
 
-  function appendMsg(text, sender, animate = true) {
+  introBtn.addEventListener('click', submitIntro);
+  introName.addEventListener('keydown',  e => { if (e.key === 'Enter') { e.preventDefault(); introEmail.focus(); } });
+  introEmail.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); submitIntro(); } });
+
+  // ─── Message rendering ─────────────────────────────────────────────────────
+  function appendMsg(text, sender, senderName = null, animate = true) {
     const d = document.createElement('div');
     d.className = `chat-msg chat-msg-${sender}`;
     if (!animate) d.style.animation = 'none';
-    d.textContent = text;
+    if (sender === 'owner' && senderName) {
+      const n = document.createElement('div');
+      n.className = 'chat-msg-sender-name';
+      n.textContent = senderName;
+      d.appendChild(n);
+    }
+    const t = document.createElement('div');
+    t.textContent = text;
+    d.appendChild(t);
     msgsEl.appendChild(d);
     msgsEl.scrollTop = msgsEl.scrollHeight;
   }
@@ -274,9 +319,10 @@ if (parallaxImg) {
     msgsEl.innerHTML = '';
     if (welcome) msgsEl.appendChild(welcome);
     for (const m of msgs) {
-      appendMsg(m.message, m.sender, false);
+      appendMsg(m.message, m.sender, m.sender_name || null, false);
       if (!lastSeenAt || m.created_at > lastSeenAt) lastSeenAt = m.created_at;
     }
+    showChat();
   }
 
   function startPolling() {
@@ -294,7 +340,7 @@ if (parallaxImg) {
     const msgs = await r.json();
     if (!Array.isArray(msgs) || !msgs.length) return;
     for (const m of msgs) {
-      appendMsg(m.message, m.sender);
+      appendMsg(m.message, m.sender, m.sender_name || null);
       if (!lastSeenAt || m.created_at > lastSeenAt) lastSeenAt = m.created_at;
       if (!isOpen) { unread++; badge.hidden = false; badge.textContent = unread > 9 ? '9+' : String(unread); }
     }
@@ -306,16 +352,14 @@ if (parallaxImg) {
 
   async function doSend() {
     const text = inputEl.value.trim();
-    if (!text) return;
+    if (!text || !sessionId) return;
     inputEl.value = '';
     inputEl.style.height = 'auto';
-    const sid = await getOrCreate();
     appendMsg(text, 'visitor');
     await fetch(`${SUPA_URL}/rest/v1/chat_messages`, {
       method: 'POST', headers: hdrs,
-      body: JSON.stringify({ session_id: sid, sender: 'visitor', message: text }),
+      body: JSON.stringify({ session_id: sessionId, sender: 'visitor', message: text }),
     });
-    if (!pollTimer) startPolling();
   }
 
   if (sessionId) startPolling();

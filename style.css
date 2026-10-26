@@ -1256,6 +1256,7 @@ body::before {
 @keyframes msgpop { from{opacity:0;transform:translateY(4px)} to{opacity:1;transform:none} }
 .chat-msg-visitor { background: var(--orange); color: #fff; align-self: flex-end; border-radius: 14px 14px 4px 14px; }
 .chat-msg-owner   { background: rgba(255,255,255,.1); color: rgba(255,255,255,.9); align-self: flex-start; border-radius: 4px 14px 14px 14px; }
+.chat-msg-sender-name { font-size: 10.5px; font-weight: 700; color: var(--orange); margin-bottom: 3px; }
 
 .chat-footer {
   display: flex;
@@ -1293,6 +1294,40 @@ body::before {
 }
 .chat-send:hover  { background: var(--orange-dark); }
 .chat-send:active { transform: scale(.93); }
+
+.chat-intro {
+  padding: 20px 18px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.chat-intro-text { font-size: 13.5px; color: rgba(255,255,255,.7); margin: 0 0 4px; line-height: 1.45; }
+.chat-intro-input {
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 10px;
+  color: #fff;
+  padding: 9px 13px;
+  font-size: 13.5px;
+  font-family: inherit;
+  transition: border-color .2s;
+}
+.chat-intro-input::placeholder { color: rgba(255,255,255,.3); }
+.chat-intro-input:focus { outline: none; border-color: var(--orange); }
+.chat-intro-input.invalid { border-color: #ef4444; }
+.chat-intro-btn {
+  background: var(--orange);
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 10px;
+  cursor: pointer;
+  margin-top: 2px;
+  transition: background .18s;
+}
+.chat-intro-btn:hover { background: var(--orange-dark); }
 
 @media (max-width: 420px) {
   #chat-widget { width: calc(100vw - 28px); right: 14px; bottom: 88px; }
