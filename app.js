@@ -345,6 +345,19 @@ if (parallaxImg) {
 
   async function pollNew() {
     if (!sessionId) return;
+
+    // Vérifie si la session a été fermée
+    const sr = await fetch(`${SUPA_URL}/rest/v1/chat_sessions?id=eq.${sessionId}&select=status`, { headers: hdrs });
+    const [sess] = await sr.json().catch(() => [null]);
+    if (sess?.status === 'closed') {
+      clearInterval(pollTimer); pollTimer = null;
+      appendMsg('✅ Conversation terminée par notre équipe. Merci !', 'owner', null);
+      footerEl.hidden = true;
+      sessionId = null;
+      localStorage.removeItem('2f3d_chat_session');
+      return;
+    }
+
     const since = lastSeenAt ? `&created_at=gt.${encodeURIComponent(lastSeenAt)}` : '';
     const r = await fetch(
       `${SUPA_URL}/rest/v1/chat_messages?session_id=eq.${sessionId}&sender=eq.owner&order=created_at.asc${since}`,

@@ -1301,6 +1301,9 @@ body::before {
   flex-direction: column;
   gap: 10px;
 }
+.chat-intro[hidden],
+#chat-messages[hidden],
+#chat-footer[hidden] { display: none !important; }
 .chat-intro-text { font-size: 13.5px; color: rgba(255,255,255,.7); margin: 0 0 4px; line-height: 1.45; }
 .chat-intro-input {
   background: rgba(255,255,255,.07);
